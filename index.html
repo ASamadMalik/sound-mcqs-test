@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound - 30 MCQs Practice Test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #eef2f7;
+    color: #1a1a2e;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #0f4c81, #1a6fb5);
+    color: #fff;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.6rem; margin-bottom: 6px; }
+  header p { font-size: 0.95rem; opacity: 0.9; }
+  .info-bar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    background: #f7f9fc;
+    padding: 14px;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+  .info-bar span { font-weight: 600; color: #0f4c81; }
+  .timer {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0f4c81;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .timer.warning { background: #c0392b; animation: pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity: 0.7; } }
+  .student-info {
+    padding: 20px 24px;
+    background: #f7f9fc;
+    border-bottom: 1px solid #e2e8f0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .student-info label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: #333; }
+  .student-info input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+  .student-info input:focus { outline: 2px solid #1a6fb5; border-color: transparent; }
+  .question {
+    padding: 18px 24px;
+    border-bottom: 1px solid #edf2f7;
+  }
+  .question:hover { background: #fafcff; }
+  .question p.qtext {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1a1a2e;
+  }
+  .question label {
+    display: block;
+    padding: 8px 12px;
+    margin: 4px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+  }
+  .question label:hover { background: #eef4fb; border-color: #1a6fb5; }
+  .question input[type="radio"] { margin-right: 8px; accent-color: #1a6fb5; }
+  .question input[type="radio"]:checked + span { font-weight: 700; color: #0f4c81; }
+  .submit-area {
+    padding: 24px;
+    text-align: center;
+    background: #f7f9fc;
+    border-top: 2px solid #1a6fb5;
+  }
+  .submit-btn {
+    background: linear-gradient(135deg, #0f4c81, #1a6fb5);
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(15,76,129,0.3); }
+  .submit-btn:disabled { background: #a0aec0; cursor: not-allowed; transform: none; }
+  .progress-bar {
+    position: sticky;
+    top: 48px;
+    z-index: 99;
+    background: #fff;
+    padding: 8px 24px;
+    font-size: 0.85rem;
+    color: #555;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .progress-track {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1a6fb5, #27ae60);
+    width: 0%;
+    transition: width 0.3s;
+  }
+  .result-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .result-modal.show { display: flex; }
+  .result-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .result-card h2 { color: #0f4c81; margin-bottom: 12px; }
+  .result-card .score-big { font-size: 3rem; font-weight: 800; color: #27ae60; margin: 12px 0; }
+  .result-card .pct { font-size: 1.2rem; color: #555; margin-bottom: 16px; }
+  .result-card p { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
+  .result-card button {
+    background: #0f4c81; color: #fff; border: none;
+    padding: 10px 32px; border-radius: 6px; cursor: pointer; font-weight: 600;
+  }
+  @media (max-width: 600px) {
+    .student-info { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.25rem; }
+    .question { padding: 14px 16px; }
+    .submit-btn { width: 100%; padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Sound — 30 MCQs Practice Test</h1>
+    <p>Based on Textbook Content (Unit 11: Sound)</p>
+  </header>
+
+  <div class="info-bar">
+    <div>Total Questions: <span>30</span></div>
+    <div>Total Marks: <span>30</span></div>
+    <div>Time Allowed: <span>30 Minutes</span></div>
+  </div>
+
+  <div class="timer" id="timer">⏱ 30:00</div>
+
+  <div class="student-info">
+    <div>
+      <label for="studentName">Student Name</label>
+      <input type="text" id="studentName" placeholder="Enter your full name" required>
+    </div>
+    <div>
+      <label for="rollNo">Roll No.</label>
+      <input type="text" id="rollNo" placeholder="Enter your roll number" required>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <span id="progressText">Answered: 0 / 30</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <form id="quizForm" onsubmit="return false;">
+
+    <!-- Q1 -->
+    <div class="question">
+      <p class="qtext">Q1. Sound is produced by:</p>
+      <label><input type="radio" name="q1" value="A"><span>A) Heating objects</span></label>
+      <label><input type="radio" name="q1" value="B"><span>B) Vibrating sources</span></label>
+      <label><input type="radio" name="q1" value="C"><span>C) Cooling objects</span></label>
+      <label><input type="radio" name="q1" value="D"><span>D) Lighting objects</span></label>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question">
+      <p class="qtext">Q2. Sound waves are:</p>
+      <label><input type="radio" name="q2" value="A"><span>A) Electromagnetic waves</span></label>
+      <label><input type="radio" name="q2" value="B"><span>B) Mechanical, longitudinal waves</span></label>
+      <label><input type="radio" name="q2" value="C"><span>C) Transverse waves</span></label>
+      <label><input type="radio" name="q2" value="D"><span>D) Light waves</span></label>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question">
+      <p class="qtext">Q3. The regions where air pressure is slightly higher than surrounding air pressure are called:</p>
+      <label><input type="radio" name="q3" value="A"><span>A) Rarefactions</span></label>
+      <label><input type="radio" name="q3" value="B"><span>B) Compressions</span></label>
+      <label><input type="radio" name="q3" value="C"><span>C) Wavelengths</span></label>
+      <label><input type="radio" name="q3" value="D"><span>D) Amplitudes</span></label>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question">
+      <p class="qtext">Q4. The regions where air pressure is slightly lower than the surrounding air pressure are called:</p>
+      <label><input type="radio" name="q4" value="A"><span>A) Compressions</span></label>
+      <label><input type="radio" name="q4" value="B"><span>B) Rarefactions</span></label>
+      <label><input type="radio" name="q4" value="C"><span>C) Crests</span></label>
+      <label><input type="radio" name="q4" value="D"><span>D) Troughs</span></label>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question">
+      <p class="qtext">Q5. The direction of vibration of air molecules in a sound wave is:</p>
+      <label><input type="radio" name="q5" value="A"><span>A) Perpendicular to the wave motion</span></label>
+      <label><input type="radio" name="q5" value="B"><span>B) Parallel to the wave motion</span></label>
+      <label><input type="radio" name="q5" value="C"><span>C) At 45° to the wave motion</span></label>
+      <label><input type="radio" name="q5" value="D"><span>D) Random</span></label>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question">
+      <p class="qtext">Q6. Sound travels in the form of:</p>
+      <label><input type="radio" name="q6" value="A"><span>A) Light energy</span></label>
+      <label><input type="radio" name="q6" value="B"><span>B) Heat energy</span></label>
+      <label><input type="radio" name="q6" value="C"><span>C) Energy from one point to another</span></label>
+      <label><input type="radio" name="q6" value="D"><span>D) Magnetic energy</span></label>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question">
+      <p class="qtext">Q7. Which of the following is NOT required for sound to travel?</p>
+      <label><input type="radio" name="q7" value="A"><span>A) Solid</span></label>
+      <label><input type="radio" name="q7" value="B"><span>B) Liquid</span></label>
+      <label><input type="radio" name="q7" value="C"><span>C) Gas</span></label>
+      <label><input type="radio" name="q7" value="D"><span>D) Vacuum</span></label>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question">
+      <p class="qtext">Q8. In the Bell Jar experiment, what happens to the sound as air is gradually pumped out?</p>
+      <label><input type="radio" name="q8" value="A"><span>A) Sound becomes louder</span></label>
+      <label><input type="radio" name="q8" value="B"><span>B) Sound becomes fainter</span></label>
+      <label><input type="radio" name="q8" value="C"><span>C) Sound remains the same</span></label>
+      <label><input type="radio" name="q8" value="D"><span>D) Sound stops immediately</span></label>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question">
+      <p class="qtext">Q9. The Bell Jar experiment demonstrates that:</p>
+      <label><input type="radio" name="q9" value="A"><span>A) Sound travels faster in solids</span></label>
+      <label><input type="radio" name="q9" value="B"><span>B) Sound cannot travel in a vacuum</span></label>
+      <label><input type="radio" name="q9" value="C"><span>C) Sound travels in straight lines</span></label>
+      <label><input type="radio" name="q9" value="D"><span>D) Sound is a transverse wave</span></label>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question">
+      <p class="qtext">Q10. In the Bell Jar experiment, why is the electric bell suspended inside the jar?</p>
+      <label><input type="radio" name="q10" value="A"><span>A) To make it louder</span></label>
+      <label><input type="radio" name="q10" value="B"><span>B) To prevent sound energy from being transmitted through the glass</span></label>
+      <label><input type="radio" name="q10" value="C"><span>C) To make it vibrate more</span></label>
+      <label><input type="radio" name="q10" value="D"><span>D) To change its frequency</span></label>
+    </div>
+
+    <!-- Q11 -->
+    <div class="question">
+      <p class="qtext">Q11. The compressions and rarefactions of sound waves are due to:</p>
+      <label><input type="radio" name="q11" value="A"><span>A) Constant air pressure</span></label>
+      <label><input type="radio" name="q11" value="B"><span>B) Slight change in air pressure</span></label>
+      <label><input type="radio" name="q11" value="C"><span>C) Change in temperature</span></label>
+      <label><input type="radio" name="q11" value="D"><span>D) Change in humidity</span></label>
+    </div>
+
+    <!-- Q12 -->
+    <div class="question">
+      <p class="qtext">Q12. Which of the following is TRUE about sound waves?</p>
+      <label><input type="radio" name="q12" value="A"><span>A) They can travel through a vacuum</span></label>
+      <label><input type="radio" name="q12" value="B"><span>B) They are electromagnetic waves</span></label>
+      <label><input type="radio" name="q12" value="C"><span>C) They need a medium to propagate</span></label>
+      <label><input type="radio" name="q12" value="D"><span>D) They travel faster than light</span></label>
+    </div>
+
+    <!-- Q13 -->
+    <div class="question">
+      <p class="qtext">Q13. When a drum is hit, what happens to the air around it?</p>
+      <label><input type="radio" name="q13" value="A"><span>A) Air becomes still</span></label>
+      <label><input type="radio" name="q13" value="B"><span>B) Air molecules vibrate and produce compressions and rarefactions</span></label>
+      <label><input type="radio" name="q13" value="C"><span>C) Air disappears</span></label>
+      <label><input type="radio" name="q13" value="D"><span>D) Air changes color</span></label>
+    </div>
+
+    <!-- Q14 -->
+    <div class="question">
+      <p class="qtext">Q14. The energy of sound is related to:</p>
+      <label><input type="radio" name="q14" value="A"><span>A) The color of the object</span></label>
+      <label><input type="radio" name="q14" value="B"><span>B) The vibrating motion of molecules</span></label>
+      <label><input type="radio" name="q14" value="C"><span>C) The temperature of the room</span></label>
+      <label><input type="radio" name="q14" value="D"><span>D) The size of the object</span></label>
+    </div>
+
+    <!-- Q15 -->
+    <div class="question">
+      <p class="qtext">Q15. A guitar produces a musical note when:</p>
+      <label><input type="radio" name="q15" value="A"><span>A) It is painted</span></label>
+      <label><input type="radio" name="q15" value="B"><span>B) The string vibrates</span></label>
+      <label><input type="radio" name="q15" value="C"><span>C) It is exposed to light</span></label>
+      <label><input type="radio" name="q15" value="D"><span>D) It is heated</span></label>
+    </div>
+
+    <!-- Q16 -->
+    <div class="question">
+      <p class="qtext">Q16. Which of the following statements about sound is correct?</p>
+      <label><input type="radio" name="q16" value="A"><span>A) Sound travels faster in vacuum</span></label>
+      <label><input type="radio" name="q16" value="B"><span>B) Sound cannot travel through solids</span></label>
+      <label><input type="radio" name="q16" value="C"><span>C) Sound travels in the form of compressions and rarefactions</span></label>
+      <label><input type="radio" name="q16" value="D"><span>D) Sound is a transverse wave</span></label>
+    </div>
+
+    <!-- Q17 -->
+    <div class="question">
+      <p class="qtext">Q17. In a sound wave, what is the relationship between the direction of vibration and wave motion?</p>
+      <label><input type="radio" name="q17" value="A"><span>A) Perpendicular</span></label>
+      <label><input type="radio" name="q17" value="B"><span>B) Parallel</span></label>
+      <label><input type="radio" name="q17" value="C"><span>C) Opposite</span></label>
+      <label><input type="radio" name="q17" value="D"><span>D) No relationship</span></label>
+    </div>
+
+    <!-- Q18 -->
+    <div class="question">
+      <p class="qtext">Q18. The Bell Jar experiment uses:</p>
+      <label><input type="radio" name="q18" value="A"><span>A) A water pump</span></label>
+      <label><input type="radio" name="q18" value="B"><span>B) A vacuum pump</span></label>
+      <label><input type="radio" name="q18" value="C"><span>C) A heat pump</span></label>
+      <label><input type="radio" name="q18" value="D"><span>D) An air compressor</span></label>
+    </div>
+
+    <!-- Q19 -->
+    <div class="question">
+      <p class="qtext">Q19. What happens to the sound when the air is completely removed from the Bell Jar?</p>
+      <label><input type="radio" name="q19" value="A"><span>A) Sound becomes louder</span></label>
+      <label><input type="radio" name="q19" value="B"><span>B) Sound becomes clearer</span></label>
+      <label><input type="radio" name="q19" value="C"><span>C) No sound can be heard</span></label>
+      <label><input type="radio" name="q19" value="D"><span>D) Sound changes frequency</span></label>
+    </div>
+
+    <!-- Q20 -->
+    <div class="question">
+      <p class="qtext">Q20. The rising and falling of air pressure in a sound wave:</p>
+      <label><input type="radio" name="q20" value="A"><span>A) Stops after a short time</span></label>
+      <label><input type="radio" name="q20" value="B"><span>B) Continues as long as the drum produces sound</span></label>
+      <label><input type="radio" name="q20" value="C"><span>C) Happens only in liquids</span></label>
+      <label><input type="radio" name="q20" value="D"><span>D) Happens only in solids</span></label>
+    </div>
+
+    <!-- Q21 -->
+    <div class="question">
+      <p class="qtext">Q21. Sound waves are:</p>
+      <label><input type="radio" name="q21" value="A"><span>A) Transverse waves</span></label>
+      <label><input type="radio" name="q21" value="B"><span>B) Longitudinal waves</span></label>
+      <label><input type="radio" name="q21" value="C"><span>C) Electromagnetic waves</span></label>
+      <label><input type="radio" name="q21" value="D"><span>D) Stationary waves</span></label>
+    </div>
+
+    <!-- Q22 -->
+    <div class="question">
+      <p class="qtext">Q22. Which of the following is an example of a vibrating source that produces sound?</p>
+      <label><input type="radio" name="q22" value="A"><span>A) A still rock</span></label>
+      <label><input type="radio" name="q22" value="B"><span>B) A drum skin</span></label>
+      <label><input type="radio" name="q22" value="C"><span>C) A piece of paper</span></label>
+      <label><input type="radio" name="q22" value="D"><span>D) A glass of water</span></label>
+    </div>
+
+    <!-- Q23 -->
+    <div class="question">
+      <p class="qtext">Q23. In the Bell Jar experiment, why does the sound become fainter as air is pumped out?</p>
+      <label><input type="radio" name="q23" value="A"><span>A) The bell stops vibrating</span></label>
+      <label><input type="radio" name="q23" value="B"><span>B) The medium (air) for sound propagation is reduced</span></label>
+      <label><input type="radio" name="q23" value="C"><span>C) The glass absorbs the sound</span></label>
+      <label><input type="radio" name="q23" value="D"><span>D) The vacuum pump makes noise</span></label>
+    </div>
+
+    <!-- Q24 -->
+    <div class="question">
+      <p class="qtext">Q24. The compressions and rarefactions in a sound wave are represented by:</p>
+      <label><input type="radio" name="q24" value="A"><span>A) C and R</span></label>
+      <label><input type="radio" name="q24" value="B"><span>B) A and B</span></label>
+      <label><input type="radio" name="q24" value="C"><span>C) X and Y</span></label>
+      <label><input type="radio" name="q24" value="D"><span>D) P and Q</span></label>
+    </div>
+
+    <!-- Q25 -->
+    <div class="question">
+      <p class="qtext">Q25. Which of the following can be concluded from the Bell Jar experiment?</p>
+      <label><input type="radio" name="q25" value="A"><span>A) Sound travels faster in air</span></label>
+      <label><input type="radio" name="q25" value="B"><span>B) Sound cannot travel in a vacuum</span></label>
+      <label><input type="radio" name="q25" value="C"><span>C) Sound is a transverse wave</span></label>
+      <label><input type="radio" name="q25" value="D"><span>D) Sound travels in straight lines only</span></label>
+    </div>
+
+    <!-- Q26 -->
+    <div class="question">
+      <p class="qtext">Q26. What is the source of sound in a guitar?</p>
+      <label><input type="radio" name="q26" value="A"><span>A) The body of the guitar</span></label>
+      <label><input type="radio" name="q26" value="B"><span>B) The vibrating string</span></label>
+      <label><input type="radio" name="q26" value="C"><span>C) The sound hole</span></label>
+      <label><input type="radio" name="q26" value="D"><span>D) The player's hand</span></label>
+    </div>
+
+    <!-- Q27 -->
+    <div class="question">
+      <p class="qtext">Q27. Sound is a:</p>
+      <label><input type="radio" name="q27" value="A"><span>A) Chemical wave</span></label>
+      <label><input type="radio" name="q27" value="B"><span>B) Mechanical wave</span></label>
+      <label><input type="radio" name="q27" value="C"><span>C) Magnetic wave</span></label>
+      <label><input type="radio" name="q27" value="D"><span>D) Static wave</span></label>
+    </div>
+
+    <!-- Q28 -->
+    <div class="question">
+      <p class="qtext">Q28. The air pressure in a compression is:</p>
+      <label><input type="radio" name="q28" value="A"><span>A) Lower than surrounding air pressure</span></label>
+      <label><input type="radio" name="q28" value="B"><span>B) Higher than surrounding air pressure</span></label>
+      <label><input type="radio" name="q28" value="C"><span>C) Equal to surrounding air pressure</span></label>
+      <label><input type="radio" name="q28" value="D"><span>D) Zero</span></label>
+    </div>
+
+    <!-- Q29 -->
+    <div class="question">
+      <p class="qtext">Q29. The air pressure in a rarefaction is:</p>
+      <label><input type="radio" name="q29" value="A"><span>A) Higher than surrounding air pressure</span></label>
+      <label><input type="radio" name="q29" value="B"><span>B) Lower than surrounding air pressure</span></label>
+      <label><input type="radio" name="q29" value="C"><span>C) Equal to surrounding air pressure</span></label>
+      <label><input type="radio" name="q29" value="D"><span>D) Infinite</span></label>
+    </div>
+
+    <!-- Q30 -->
+    <div class="question">
+      <p class="qtext">Q30. Which of the following statements is TRUE about the Bell Jar experiment?</p>
+      <label><input type="radio" name="q30" value="A"><span>A) The electric bell is placed on the glass</span></label>
+      <label><input type="radio" name="q30" value="B"><span>B) The electric bell is suspended inside the jar</span></label>
+      <label><input type="radio" name="q30" value="C"><span>C) The electric bell is placed outside the jar</span></label>
+      <label><input type="radio" name="q30" value="D"><span>D) The electric bell is not needed</span></label>
+    </div>
+
+  </form>
+
+  <div class="submit-area">
+    <button class="submit-btn" id="submitBtn" onclick="submitTest()">Submit Test</button>
+  </div>
+</div>
+
+<!-- Result Modal -->
+<div class="result-modal" id="resultModal">
+  <div class="result-card">
+    <h2>✅ Test Submitted</h2>
+    <div class="score-big" id="resultScore">0/30</div>
+    <div class="pct" id="resultPct">0%</div>
+    <p id="resultMsg">Your result has been sent to the teacher.</p>
+    <button onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+   Format: https://script.google.com/macros/s/XXXXXXXXXXXX/exec
+   ============================================================ */
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_V7xD3onOLSXVPDA7k3IirjKB9FmeIVPSpm_rDCPjcZIW6xSbQ9g8mgQXWtRDXeGKwQ/exec";
+
+/* ---------- ANSWER KEY ---------- */
+const answerKey = {
+  q1:"B", q2:"B", q3:"B", q4:"B", q5:"B",
+  q6:"C", q7:"D", q8:"B", q9:"B", q10:"B",
+  q11:"B", q12:"C", q13:"B", q14:"B", q15:"B",
+  q16:"C", q17:"B", q18:"B", q19:"C", q20:"B",
+  q21:"B", q22:"B", q23:"B", q24:"A", q25:"B",
+  q26:"B", q27:"B", q28:"B", q29:"B", q30:"B"
+};
+
+/* ---------- TAB SWITCH DETECTION ---------- */
+let tabSwitchCount = 0;
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) {
+    tabSwitchCount++;
+  }
+});
+
+/* ---------- 30-MINUTE TIMER ---------- */
+let timeLeft = 30 * 60; // seconds
+const timerEl = document.getElementById("timer");
+const submitBtn = document.getElementById("submitBtn");
+
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  timerEl.textContent = "⏱ " + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+  if (timeLeft <= 120) {
+    timerEl.classList.add("warning");
+  }
+  if (timeLeft <= 0) {
+    clearInterval(timerInterval);
+    alert("⏰ Time is up! Your test will be submitted automatically.");
+    submitTest(true);
+  }
+  timeLeft--;
+}
+const timerInterval = setInterval(updateTimer, 1000);
+updateTimer();
+
+/* ---------- PROGRESS TRACKER ---------- */
+const totalQuestions = 30;
+document.getElementById("quizForm").addEventListener("change", updateProgress);
+
+function updateProgress() {
+  let answered = 0;
+  for (let i = 1; i <= totalQuestions; i++) {
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  document.getElementById("progressText").textContent = `Answered: ${answered} / ${totalQuestions}`;
+  document.getElementById("progressFill").style.width = (answered / totalQuestions * 100) + "%";
+}
+
+/* ---------- AUTO-SUBMIT ON TAB SWITCH (3 strikes) ---------- */
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden && tabSwitchCount >= 3) {
+    alert("⚠️ You switched tabs 3 times. Your test is being submitted automatically.");
+    submitTest(true, "Tab Switch Limit Exceeded");
+  }
+});
+
+/* ---------- SUBMIT TEST ---------- */
+let hasSubmitted = false;
+
+function submitTest(auto = false, reason = "Manual Submit") {
+  if (hasSubmitted) return;
+
+  const name = document.getElementById("studentName").value.trim();
+  const roll = document.getElementById("rollNo").value.trim();
+
+  if (!auto) {
+    if (!name || !roll) {
+      alert("⚠️ Please enter your Name and Roll No. before submitting.");
+      return;
+    }
+    const confirmSubmit = confirm("Are you sure you want to submit your test?");
+    if (!confirmSubmit) return;
+  }
+
+  hasSubmitted = true;
+  clearInterval(timerInterval);
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  let score = 0;
+  for (let i = 1; i <= totalQuestions; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected && selected.value === answerKey[`q${i}`]) {
+      score++;
+    }
+  }
+
+  const percentage = (score / totalQuestions * 100).toFixed(2);
+
+  const data = {
+    name: name || "Unknown",
+    roll: roll || "Unknown",
+    score: score,
+    percentage: percentage + "%",
+    tabSwitches: tabSwitchCount,
+    reason: reason,
+    testName: "Sound - 30 MCQs"
+  };
+
+  // Send to Google Sheets
+  if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")) {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(err => console.error("Submission error:", err));
+  } else {
+    console.warn("⚠️ GOOGLE_SCRIPT_URL not set. Result not sent to Google Sheets.");
+  }
+
+  // Show result modal
+  document.getElementById("resultScore").textContent = score + "/" + totalQuestions;
+  document.getElementById("resultPct").textContent = percentage + "%";
+  document.getElementById("resultMsg").textContent =
+    (GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")
+      ? "⚠️ Demo mode: URL not configured. Result not saved."
+      : "✅ Your result has been sent to the teacher.");
+  document.getElementById("resultModal").classList.add("show");
+}
+
+function closeModal() {
+  document.getElementById("resultModal").classList.remove("show");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+</body>
+</html>
